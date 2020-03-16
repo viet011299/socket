@@ -1,4 +1,4 @@
-để chạy 
--npm i
--node index.js
-http://localhost:6969/
+để chạy <br>
+-npm i <br>
+-node index.js <br>
+http://localhost:6969/ 
