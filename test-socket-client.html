@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title of the document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+</head>
+
+<body>
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://localhost:6969');
+    socket.on('news', function (data) {
+        if (data) {
+            $("tbody").append(`
+                <tr>
+                <th scope="row">${data.mssv}</th>
+                <td>${data.name}</td>
+                <td>${data.class}</td>
+                <td>${data.phone}</td>
+                <td> ${data.address} </td>
+            </tr>
+        `)
+        }
+        else {
+            $("#scan").append("<h4 >Không có sinh viên</h4>")
+        }
+        console.log(data);
+    });
+    socket.on('show_all', function (data) {
+        data.forEach(item => {
+            $("tbody").append(`
+          <tr>
+          <th scope="row">${item.mssv}</th>
+          <td>${item.name}</td>
+          <td>${item.class}</td>
+          <td>${item.phone}</td>
+          <td> ${item.address} </td>
+      </tr>
+      
+      `)
+        });
+
+    });
+    $(document).ready(function () {
+        $('#send_private').click(function () {
+            socket.emit('private', $('#data').val());
+            $('tbody').empty();
+            $('#scan').empty();
+
+        });
+
+        $('#show_all').click(function () {
+            socket.emit('show',);
+            $('tbody').empty();
+            $('#scan').empty();
+            $('#data').val('');
+        });
+    });
+</script>
+<div class="container">
+    <h1 align="center"> Tra cứu sinh viên</h1>
+    <button type="button" class="btn btn-primary" id="show_all">Tất cả sinh viên</button> <br><br>
+    <input type="text" id="data" placeholder="Nhập mã sinh viên"><br><br>
+    <button type="button" class="btn btn-success" id="send_private">Tìm</button><br>
+    <div id="scan" style="color: red">
+
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">MSSV</th>
+                <th scope="col">Tên</th>
+                <th scope="col">Lớp</th>
+                <th scope="col">SĐT</th>
+                <th scope="col">Địa chỉ</th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+        </tbody>
+    </table>
+</div>
+
+
+</html>
